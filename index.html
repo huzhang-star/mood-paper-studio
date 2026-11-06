@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#f3f1ec">
+  <title>心情壁纸工坊</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="brand-copy"><h1>心情壁纸工坊</h1><p>MOOD PAPER STUDIO</p></div>
+      <div class="header-actions">
+        <button class="icon-button" id="shuffleButton" type="button" aria-label="随机生成" title="随机生成"><span aria-hidden="true">↻</span></button>
+        <button class="save-button" id="saveButton" type="button"><span aria-hidden="true">↓</span><span>保存壁纸</span></button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="preview-column" aria-label="壁纸预览">
+        <div class="preview-heading"><div><span class="section-index">01</span><span class="section-label">实时预览</span></div><span class="resolution">1170 × 2532</span></div>
+        <div class="preview-stage">
+          <div class="phone-frame"><canvas id="wallpaperCanvas" width="1170" height="2532" aria-label="生成的心情壁纸预览"></canvas></div>
+          <div class="mood-rail" aria-hidden="true"><span id="railMood">晴朗</span><i></i><small>今天也有今天的光</small></div>
+        </div>
+      </section>
+
+      <section class="editor-column" aria-label="壁纸设置">
+        <div class="editor-intro"><span class="section-index">02</span><div><h2>把此刻，留在屏幕上</h2><p>选一种心情色调，再留下一句只属于今天的话。</p></div></div>
+
+        <div class="control-section">
+          <div class="control-title"><label>心情主题</label><span id="themeName">晨光 · 晴朗</span></div>
+          <div class="theme-grid" id="themeGrid">
+            <button class="theme-option is-active" type="button" data-theme="sunrise" aria-pressed="true"><span class="theme-colors"><i style="background:#f3a56f"></i><i style="background:#f6d3a8"></i><i style="background:#29414a"></i></span><b>晨光</b><small>轻盈</small></button>
+            <button class="theme-option" type="button" data-theme="forest" aria-pressed="false"><span class="theme-colors"><i style="background:#315a4a"></i><i style="background:#a9c5a2"></i><i style="background:#eff1df"></i></span><b>松间</b><small>平静</small></button>
+            <button class="theme-option" type="button" data-theme="ocean" aria-pressed="false"><span class="theme-colors"><i style="background:#236c83"></i><i style="background:#7fc6cf"></i><i style="background:#f2eee5"></i></span><b>潮汐</b><small>自在</small></button>
+            <button class="theme-option" type="button" data-theme="berry" aria-pressed="false"><span class="theme-colors"><i style="background:#9b4665"></i><i style="background:#df9aa7"></i><i style="background:#fff4e9"></i></span><b>晚霞</b><small>温柔</small></button>
+            <button class="theme-option" type="button" data-theme="night" aria-pressed="false"><span class="theme-colors"><i style="background:#111926"></i><i style="background:#6878aa"></i><i style="background:#e9e6d8"></i></span><b>夜航</b><small>沉静</small></button>
+            <button class="theme-option" type="button" data-theme="lemon" aria-pressed="false"><span class="theme-colors"><i style="background:#efcf4c"></i><i style="background:#fbf2aa"></i><i style="background:#30382f"></i></span><b>柠光</b><small>明亮</small></button>
+          </div>
+        </div>
+
+        <div class="control-section">
+          <div class="control-title"><label>自定义颜色</label><span>点击色块调整</span></div>
+          <div class="color-row">
+            <label class="color-field" for="colorStart"><span>主色</span><input id="colorStart" type="color" value="#f3a56f"><b id="colorStartValue">#F3A56F</b></label>
+            <label class="color-field" for="colorEnd"><span>辅色</span><input id="colorEnd" type="color" value="#f6d3a8"><b id="colorEndValue">#F6D3A8</b></label>
+            <label class="color-field" for="colorText"><span>文字</span><input id="colorText" type="color" value="#29414a"><b id="colorTextValue">#29414A</b></label>
+          </div>
+        </div>
+
+        <div class="control-section quote-section">
+          <div class="control-title"><label for="quoteInput">此刻的一句话</label><span><b id="quoteCount">13</b> / 42</span></div>
+          <div class="quote-box"><textarea id="quoteInput" rows="2" maxlength="42">慢慢来，光会找到你。</textarea><button id="quoteButton" type="button" aria-label="换一句" title="换一句">换一句</button></div>
+        </div>
+
+        <div class="control-section settings-section">
+          <div class="setting-row"><div><strong>显示时间</strong><small>在壁纸顶部显示当前时间</small></div><button class="toggle is-on" id="timeToggle" type="button" role="switch" aria-checked="true" aria-label="显示时间"><span></span></button></div>
+          <div class="setting-row"><div><strong>文字位置</strong><small>调整句子在画面中的重心</small></div><div class="segmented" id="positionControl" aria-label="文字位置"><button type="button" data-position="top">上</button><button class="is-active" type="button" data-position="middle">中</button><button type="button" data-position="bottom">下</button></div></div>
+        </div>
+
+        <div class="editor-footer"><p><span></span>所有创作都只留在本机</p><button id="resetButton" type="button">恢复默认</button></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+    <div class="modal-bar"><div><strong id="modalTitle">壁纸已生成</strong><small>长按图片或右键即可保存</small></div><button id="closeModal" type="button" aria-label="关闭预览">×</button></div>
+    <div class="modal-image-wrap"><img id="resultImage" alt="生成的心情壁纸"></div>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>
